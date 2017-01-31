@@ -1,0 +1,17 @@
+[
+  {
+    "from": "api.cromoly.dev",
+    "to": "http://api:3000",
+    "secure": true
+  },
+  {
+    "from": "website.cromoly.dev",
+    "to": "http://website:3000",
+    "secure": true
+  },
+  {
+    "from": "management.cromoly.dev",
+    "to": "http://management:3000",
+    "secure": true
+  }
+]

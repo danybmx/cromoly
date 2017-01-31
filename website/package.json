@@ -1,0 +1,24 @@
+{
+  "name": "website",
+  "version": "1.0.0",
+  "description": "Cromoly 2017 website",
+  "keywords": [],
+  "license": "ISC",
+  "author": "Daniel Rodríguez Gil <daniel@dpstudios.es>",
+  "main": "main.js",
+  "scripts": {
+    "dev": "nodemon -e js,json --watch app --watch server.js main",
+    "prestart": "npm install",
+    "start": "node main"
+  },
+  "dependencies": {
+    "express": "^4.14.0"
+  },
+  "devDependencies": {
+    "bcrypt": "^1.0.2",
+    "eslint": "^3.13.1",
+    "eslint-config-google": "^0.7.1",
+    "nodemon": "^1.11.0",
+    "jsonwebtoken": "^7.2.1"
+  }
+}
