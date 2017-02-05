@@ -5,6 +5,7 @@ services:
     image: node:latest
     environment:
       - VIRTUAL_HOST=api.cromoly.com
+      - VIRTUAL_PROTO=http
       - LETSENCRYPT_HOST=api.cromoly.com
       - LETSENCRYPT_EMAIL=dany@cromoly.com
       - NODE_ENV=production
@@ -12,6 +13,8 @@ services:
       - ./api:/app
     working_dir: /app
     command: npm start
+    expose: 
+      - "3000"
     networks:
       - database
       - default
@@ -21,6 +24,7 @@ services:
     image: node:latest
     environment:
       - VIRTUAL_HOST=management.cromoly.com
+      - VIRTUAL_PROTO=http
       - LETSENCRYPT_HOST=management.cromoly.com
       - LETSENCRYPT_EMAIL=dany@cromoly.com
       - NODE_ENV=production
@@ -29,6 +33,8 @@ services:
       - ./management:/app
     working_dir: /app
     command: npm start
+    expose:
+      - "3000"
     networks:
       - default
       - nginx-proxy
@@ -39,12 +45,15 @@ services:
     image: node:latest
     environment:
       - VIRTUAL_HOST=web.cromoly.com
+      - VIRTUAL_PROTO=http
       - NODE_ENV=production
       - API_ADDRESS=http://api:3000
     volumes:
       - ./website:/app
     working_dir: /app
     command: npm start
+    expose:
+      - "3000"
     networks:
       - default
       - nginx-proxy
