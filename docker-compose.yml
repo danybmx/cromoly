@@ -4,17 +4,24 @@ services:
   api:
     image: node:latest
     environment:
+      - VIRTUAL_HOST=api.cromoly.dev
       - NODE_ENV=development
     volumes:
       - ./api:/app
     working_dir: /app
     command: npm run dev
+    networks:
+      - default
+      - nginx-proxy
+    expose:
+      - "3000"
     links:
       - mongo
 
   management:
     image: node:latest
     environment:
+      - VIRTUAL_HOST=management.cromoly.dev
       - NODE_ENV=development
       - API_ADDRESS=//api.cromoly.dev
       - STATIC_ADDRESS=//static.cromoly.dev
@@ -22,35 +29,31 @@ services:
       - ./management:/app
     working_dir: /app
     command: npm run dev
+    networks:
+      - default
+      - nginx-proxy
+    expose:
+      - "3000"
     links:
       - api
 
   website:
     image: node:latest
     environment:
+      - VIRTUAL_HOST=cromoly.dev
       - NODE_ENV=development
       - API_ADDRESS=http://api:3000
     volumes:
       - ./website:/app
     working_dir: /app
     command: npm run dev
+    networks:
+      - default
+      - nginx-proxy
+    expose:
+      - "3000"
     links:
       - api
-
-  proxy:
-    image: node:latest
-    environment:
-      - NODE_ENV=development
-    volumes:
-      - ./proxy:/app
-    working_dir: /app
-    command: npm start
-    ports:
-      - "80:80"
-      - "443:443"
-    links:
-      - api
-      - website
 
   mongo:
     image: mongo
@@ -58,7 +61,13 @@ services:
       - "38028:27017"
     volumes:
       - mongo-data:/data/db
+    networks:
+      - default
 
 volumes:
   mongo-data:
     driver: local
+
+networks:
+  nginx-proxy:
+    external: true

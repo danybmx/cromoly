@@ -11,6 +11,7 @@ import App from './App.vue';
 
 import routes from './routes';
 import locales from './locale';
+import filters from './filters';
 
 import PageContent from './components/PageContent.vue';
 import Loader from './components/Loader.vue';
@@ -21,6 +22,9 @@ require('./assets/favicon.ico');
 // Register components
 Vue.component('page-content', PageContent);
 Vue.component('loader', Loader);
+
+// Filters
+filters.register(Vue);
 
 // i18n
 Vue.use(VueI18n);

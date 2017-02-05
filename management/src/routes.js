@@ -5,8 +5,8 @@ import Tpv from './pages/Tpv.vue';
 import Orders from './pages/Orders.vue';
 import Entries from './pages/Entries.vue';
 import Users from './pages/Users.vue';
-import Storages from './pages/Storages.vue';
 import NotFound from './pages/NotFound.vue';
+import warehouses from './pages/warehouses';
 import products from './pages/products';
 import brands from './pages/brands';
 import taxes from './pages/taxes';
@@ -130,9 +130,21 @@ export default [
     beforeEnter: requireAuth,
   },
   {
-    path: '/storages',
-    name: 'storages',
-    component: Storages,
+    path: '/warehouses',
+    name: 'warehouses',
+    component: warehouses.Index,
+    beforeEnter: requireAuth,
+  },
+  {
+    path: '/warehouses/create',
+    name: 'create-warehouse',
+    component: warehouses.Form,
+    beforeEnter: requireAuth,
+  },
+  {
+    path: '/warehouses/edit/:id',
+    name: 'edit-warehouse',
+    component: warehouses.Form,
     beforeEnter: requireAuth,
   },
   {

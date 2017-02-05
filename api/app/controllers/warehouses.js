@@ -2,12 +2,12 @@
 const express = require('express');
 const router = new express.Router();
 const mongoose = require('mongoose');
-const Storage = mongoose.model('Storage');
+const Warehouse = mongoose.model('Warehouse');
 const authenticated = require('../middleware/authenticated');
 const isAdmin = require('../middleware/isAdmin');
 
 // Resource
-const resource = require('../utils/resource')(Storage);
+const resource = require('../utils/resource')(Warehouse);
 
 // Define routes
 router.get('/', resource.findAll);

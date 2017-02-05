@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-on="http://www.w3.org/1999/xhtml">
   <page-content :page-title="$t('menu.brands')">
     <loader :loading="loading"></loader>
 

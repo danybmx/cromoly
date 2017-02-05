@@ -4,6 +4,9 @@ services:
   api:
     image: node:latest
     environment:
+      - VIRTUAL_HOST=api.cromoly.com
+      - LETSENCRYPT_HOST=api.cromoly.com
+      - LETSENCRYPT_EMAIL=dany@cromoly.com
       - NODE_ENV=production
     volumes:
       - ./api:/app
@@ -12,24 +15,30 @@ services:
     networks:
       - database
       - default
+      - nginx-proxy
 
   management:
     image: node:latest
     environment:
+      - VIRTUAL_HOST=management.cromoly.com
+      - LETSENCRYPT_HOST=management.cromoly.com
+      - LETSENCRYPT_EMAIL=dany@cromoly.com
       - NODE_ENV=production
       - API_ADDRESS=//api.cromoly.com
-      - STATIC_ADDRESS=//static.cromoly.com
     volumes:
       - ./management:/app
     working_dir: /app
-    command: npm run dev
+    command: npm start
     networks:
       - default
+      - nginx-proxy
     links:
       - api
+
   website:
     image: node:latest
     environment:
+      - VIRTUAL_HOST=web.cromoly.com
       - NODE_ENV=production
       - API_ADDRESS=http://api:3000
     volumes:
@@ -38,26 +47,12 @@ services:
     command: npm start
     networks:
       - default
+      - nginx-proxy
     links:
       - api
-
-  proxy:
-    image: node:latest
-    environment:
-      - NODE_ENV=production
-    volumes:
-      - ./proxy:/app
-    working_dir: /app
-    command: npm start
-    networks:
-      - default
-    ports:
-      - "80:80"
-      - "443:443"
-    links:
-      - api
-      - website
 
 networks:
   database:
+    external: true
+  nginx-proxy:
     external: true

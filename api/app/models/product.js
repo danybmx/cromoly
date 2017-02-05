@@ -9,10 +9,10 @@ const productOptionSchema = new Schema({
   slug: {type: String, required: true},
   price: {type: Number, required: true},
   taxes: [{type: Schema.Types.ObjectId, ref: 'Tax'}],
-  priceWithTaxes: {type: Number, required: true},
-  buyPrice: {type: Number, required: false},
+  priceWithTaxes: {type: Number},
+  buyPrice: {type: Number},
   buyTaxes: [{type: Schema.Types.ObjectId, ref: 'Tax'}],
-  buyPriceWithTaxes: {type: Number, required: true},
+  buyPriceWithTaxes: {type: Number},
   discount: {type: Number, required: true},
   stock: [
     {

@@ -18,13 +18,13 @@
         <md-card-content>
 
           <md-input-container :class="{'md-input-invalid': errors.has('product-form.name')}">
-            <label>{{$t('products.name')}}:</label>
+            <label>{{$t('products.name')}}</label>
             <md-input v-model="product.name" data-vv-name="name" v-validate data-vv-rules="required" required></md-input>
             <span class="md-error" v-if="errors.has('product-form.name')">{{errors.first('product-form.name')}}</span>
           </md-input-container>
 
           <md-input-container :class="{'md-input-invalid': errors.has('product-form.description')}">
-            <label>{{$t('products.description')}}:</label>
+            <label>{{$t('products.description')}}</label>
             <md-textarea v-model="product.description" data-vv-name="description" v-validate data-vv-rules="required" required></md-textarea>
             <span class="md-error" v-if="errors.has('product-form.description')">{{errors.first('product-form.description')}}</span>
           </md-input-container>
@@ -32,7 +32,7 @@
           <md-layout md-row :md-gutter="16">
             <md-layout md-column>
               <md-input-container :class="{'md-input-invalid': errors.has('product-form.category')}">
-                <label>{{$t('products.category')}}:</label>
+                <label>{{$t('products.category')}}</label>
                 <input type="hidden" v-model="product.category" data-vv-name="category" v-validate data-vv-rules="required">
                 <md-select v-model="product.category" required>
                   <md-option v-for="category in categories" :value="category._id">
@@ -44,7 +44,7 @@
             </md-layout>
             <md-layout md-column>
               <md-input-container :class="{'md-input-invalid': errors.has('product-form.brand')}">
-                <label>{{$t('products.brand')}}:</label>
+                <label>{{$t('products.brand')}}</label>
                 <input type="hidden" v-model="product.brand" data-vv-name="brand" v-validate data-vv-rules="required">
                 <md-select v-model="product.brand" data-vv-name="brand" v-validate data-vv-rules="required" required>
                   <md-option v-for="brand in brands" :value="brand._id">
@@ -131,43 +131,82 @@
     </form>
 
     <md-dialog @close="onClose" ref="product-option-dialog">
-      <form novalidate v-if="currentOption !== null" v-on:submit.prevent="saveProductOption()">
+      <form novalidate v-if="currentOption !== null" style="width: 800px" v-on:submit.prevent="saveProductOption()">
         <md-dialog-content>
           <md-layout md-gutter="16">
             <md-layout md-column>
-              <md-input-container :class="{'md-input-invalid': errors.has('product-option-form.ean')}">
-                <label>{{$t('products.options.ean')}}:</label>
-                <md-input data-vv-scope="product-option-form" v-model="currentOption.ean" data-vv-name="ean" v-validate data-vv-rules="required" required></md-input>
-                <span class="md-error" v-if="errors.has('product-option-form.ean')">{{errors.first('product-option-form.ean')}}</span>
+              <md-input-container>
+                <label>{{$t('products.options.ean')}}</label>
+                <md-input data-vv-scope="product-option-form" v-model="currentOption.ean"></md-input>
               </md-input-container>
             </md-layout>
             <md-layout md-column>
-              <md-input-container :class="{'md-input-invalid': errors.has('product-option-form.reference')}">
-                <label>{{$t('products.options.reference')}}:</label>
-                <md-input data-vv-scope="product-option-form" v-model="currentOption.reference" data-vv-name="reference" v-validate data-vv-rules="required" required></md-input>
-                <span class="md-error" v-if="errors.has('product-option-form.reference')">{{errors.first('product-option-form.reference')}}</span>
+              <md-input-container>
+                <label>{{$t('products.options.reference')}}</label>
+                <md-input data-vv-scope="product-option-form" v-model="currentOption.reference"></md-input>
               </md-input-container>
             </md-layout>
           </md-layout>
 
           <md-input-container :class="{'md-input-invalid': errors.has('product-option-form.name')}">
-            <label>{{$t('products.options.name')}}:</label>
+            <label>{{$t('products.options.name')}}</label>
             <md-input data-vv-scope="product-option-form" v-model="currentOption.name" data-vv-name="name" v-validate data-vv-rules="required" required></md-input>
             <span class="md-error" v-if="errors.has('product-option-form.name')">{{errors.first('product-option-form.name')}}</span>
           </md-input-container>
 
-          <md-input-container :class="{'md-input-invalid': errors.has('product-option-form.taxes')}">
-            <label>{{$t('products.options.taxes')}}:</label>
-            <input data-vv-scope="product-option-form" v-model="currentOption.taxes" data-vv-name="taxes" v-validate data-vv-rules="required|min:16">
-            <md-select multiple v-model="currentOption.taxes" required>
-              <md-option v-for="tax in taxes" :value="tax._id">{{tax.name}}</md-option>
-            </md-select>
-            <span class="md-error" v-if="errors.has('product-option-form.taxes')">{{errors.first('product-option-form.taxes')}}</span>
-          </md-input-container>
+          <md-layout md-gutter="16">
+            <md-layout md-column>
+              <md-input-container :class="{'md-input-invalid': errors.has('product-option-form.taxes')}">
+                <label>{{$t('products.options.taxes')}}</label>
+                <input data-vv-scope="product-option-form" v-model="currentOption.taxes" data-vv-name="taxes" v-validate data-vv-rules="required|min:16">
+                <md-select multiple v-model="currentOption.taxes" required>
+                  <md-option v-for="tax in taxes" :value="tax._id">{{tax.name}}</md-option>
+                </md-select>
+                <span class="md-error" v-if="errors.has('product-option-form.taxes')">{{errors.first('product-option-form.taxes')}}</span>
+              </md-input-container>
+            </md-layout>
+            <md-layout md-column>
+              <md-input-container>
+                <label>{{$t('products.options.price')}}</label>
+                <md-input data-vv-scope="product-option-form" v-model="currentOption.price"></md-input>
+              </md-input-container>
+            </md-layout>
+            <md-layout md-column>
+              <md-input-container>
+                <label>{{$t('products.options.priceWithTaxes')}}</label>
+                <md-input data-vv-scope="product-option-form" v-model="currentOption.priceWithTaxes"></md-input>
+              </md-input-container>
+            </md-layout>
+          </md-layout>
+
+          <md-layout md-gutter="16">
+            <md-layout md-column>
+              <md-input-container :class="{'md-input-invalid': errors.has('product-option-form.taxes')}">
+                <label>{{$t('products.options.buyTaxes')}}</label>
+                <input data-vv-scope="product-option-form" v-model="currentOption.buyTaxes" data-vv-name="buyTaxes" v-validate data-vv-rules="required|min:16">
+                <md-select multiple v-model="currentOption.buyTaxes" required>
+                  <md-option v-for="tax in taxes" :value="tax._id">{{tax.name}}</md-option>
+                </md-select>
+                <span class="md-error" v-if="errors.has('product-option-form.buyTaxes')">{{errors.first('product-option-form.buyTaxes')}}</span>
+              </md-input-container>
+            </md-layout>
+            <md-layout md-column>
+              <md-input-container>
+                <label>{{$t('products.options.buyPrice')}}</label>
+                <md-input data-vv-scope="product-option-form" v-model="currentOption.buyPrice"></md-input>
+              </md-input-container>
+            </md-layout>
+            <md-layout md-column>
+              <md-input-container>
+                <label>{{$t('products.options.buyPriceWithTaxes')}}</label>
+                <md-input data-vv-scope="product-option-form" v-model="currentOption.buyPriceWithTaxes"></md-input>
+              </md-input-container>
+            </md-layout>
+          </md-layout>
         </md-dialog-content>
 
         <md-dialog-actions>
-          <md-button v-on:click="cancelOption()" class="md-primary md-raised">
+          <md-button v-on:click="closeProductOptionForm()" class="md-primary md-raised">
             {{$t('buttons.cancel')}}
             <md-icon>close</md-icon>
           </md-button>
@@ -183,134 +222,135 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        action: this.$route.name === 'create-product' ? 'create' : 'edit',
-        product: {
-          name: null,
-          description: null,
-          category: null,
-          brand: null,
-          visible: true,
-          featured: false,
-          onDemand: false,
-          options: [],
-        },
-        currentOption: null,
-        currentOptionIndex: null,
-        brands: [],
-        images: [],
-        categories: [],
-        loading: false,
-      };
-    },
-    methods: {
-      saveProduct() {
-        this.$validator.validateAll('product-form').then((success) => {
-          this.loading = true;
-          let promise = null;
+export default {
+  data() {
+    return {
+      action: this.$route.name === 'create-product' ? 'create' : 'edit',
+      product: {
+        name: null,
+        description: null,
+        category: null,
+        brand: null,
+        visible: true,
+        featured: false,
+        onDemand: false,
+        options: [],
+      },
+      currentOption: null,
+      currentOptionIndex: null,
+      brands: [],
+      images: [],
+      categories: [],
+      loading: false,
+    };
+  },
+  methods: {
+    saveProduct() {
+      this.$validator.validateAll('product-form').then((success) => {
+        this.loading = true;
+        let promise = null;
 
-          if (this.category._id) {
-            promise = this.$http.put(`products/${this.product._id}`, this.product, this.$root.httpOptions());
-          } else {
-            promise = this.$http.post(`products`, this.product, this.$root.httpOptions());
-          }
-
-          promise.then(() => {
-            this.loading = false;
-            this.$router.back();
-          }).catch((err) => {
-            this.loading = false;
-            this.$root.showSnackbar(this.$t('errors.errorSaving'));
-            console.error(err);
-          });
-        }).catch(() => {
-          return this.$root.showSnackbar(this.$t('errors.checkTheForm'));
-        });
-      },
-      saveProductOption() {
-        this.$validator.validateAll('product-option-form').then((success) => {
-          console.log(success);
-          if (this.currentOptionIndex) {
-            this.product.options[this.currentOptionIndex] = this.currentOption;
-          } else {
-            this.product.options.push(this.currentOption);
-          }
-        }).catch(() => {
-          return this.$root.showSnackbar(this.$t('errors.checkTheForm'));
-        });
-      },
-      cancelOption() {
-        this.$refs['product-option-dialog'].close();
-      },
-      getDefaultTaxes() {
-        return this.taxes.map((t) => t.default ? t._id : null);
-      },
-      onClose() {
-        setTimeout(() => {
-          this.currentOptionIndex = null;
-          this.currentOption = null;
-        }, 200);
-      },
-      addOption() {
-        this.currentOption = {
-          ean: '',
-          reference: '',
-          name: '',
-          taxes: this.getDefaultTaxes(),
-          stock: [],
-          images: [],
-          discount: 0,
-          price: 0,
-          buyPrice: 0,
-          priceWithTaxes: 0,
-          buyPriceWithTaxes: 0,
-        };
-        this.currentOptionIndex = null;
-        this.$refs['product-option-dialog'].open();
-      },
-      editOption(index) {
-        this.currentOptionIndex = index;
-        this.currentOption = Object.assign({}, this.product.options[index]);
-        this.$refs['product-option-dialog'].open();
-      },
-      deleteOption(index) {
-        if (this.currentOption === index) {
-          this.currentOptionIndex = null;
-          this.currentOption = null;
+        if (this.category._id) {
+          promise = this.$http.put(`products/${this.product._id}`, this.product, this.$root.httpOptions());
+        } else {
+          promise = this.$http.post(`products`, this.product, this.$root.httpOptions());
         }
-        if (this.currentOption > index) this.currentOptionIndex -= 1;
-        this.product.options.splice(index, 1);
-      },
-    },
-    mounted() {
-      this.loading = true;
-      const categoriesPromise = this.$http.get('categories');
-      const brandsPromise = this.$http.get('brands');
-      const taxesPromise = this.$http.get('taxes', this.$root.httpOptions());
-      let productPromise;
 
-      if (this.action === 'edit') {
-        productPromise = this.$http.get('product/' + this.$route.params.id);
-      } else {
-        productPromise = Promise.resolve({body: this.product});
-      }
-
-      Promise.all([categoriesPromise, brandsPromise, taxesPromise, productPromise]).then((data) => {
-        this.loading = false;
-        this.categories = data[0].body;
-        this.brands = data[1].body;
-        this.taxes = data[2].body;
-        this.product = data[3].body;
-      }).catch((err) => {
-        console.error(err);
-        this.loading = false;
-        this.$root.showSnackbar('errors.cantLoadResources');
-        this.$router.back();
+        promise.then(() => {
+          this.loading = false;
+          this.$router.back();
+        }).catch((err) => {
+          this.loading = false;
+          this.$root.showSnackbar(this.$t('errors.errorSaving'));
+          console.error(err);
+        });
+      }).catch(() => {
+        return this.$root.showSnackbar(this.$t('errors.checkTheForm'));
       });
     },
-  };
+    saveProductOption() {
+      this.$validator.validateAll('product-option-form').then((success) => {
+        if (this.currentOptionIndex !== null) {
+          this.product.options[this.currentOptionIndex] = this.currentOption;
+        } else {
+          this.product.options.push(this.currentOption);
+        }
+        this.closeProductOptionForm();
+      }).catch(() => {
+        return this.$root.showSnackbar(this.$t('errors.checkTheForm'));
+      });
+    },
+    closeProductOptionForm() {
+      this.$refs['product-option-dialog'].close();
+    },
+    getDefaultTaxes() {
+      return this.taxes.map((t) => t.default ? t._id : null);
+    },
+    onClose() {
+      setTimeout(() => {
+        this.currentOptionIndex = null;
+        this.currentOption = null;
+      }, 300);
+    },
+    addOption() {
+      this.currentOption = {
+        ean: '',
+        reference: '',
+        name: '',
+        taxes: this.getDefaultTaxes(),
+        buyTaxes: this.getDefaultTaxes(),
+        stock: [],
+        images: [],
+        discount: 0,
+        price: 0,
+        buyPrice: 0,
+        priceWithTaxes: 0,
+        buyPriceWithTaxes: 0,
+      };
+      this.currentOptionIndex = null;
+      this.$refs['product-option-dialog'].open();
+    },
+    editOption(index) {
+      this.currentOptionIndex = index;
+      this.currentOption = Object.assign({}, this.product.options[index]);
+      this.$refs['product-option-dialog'].open();
+    },
+    deleteOption(index) {
+      if (this.currentOption === index) {
+        this.currentOptionIndex = null;
+        this.currentOption = null;
+      }
+      if (this.currentOption > index) this.currentOptionIndex -= 1;
+      this.product.options.splice(index, 1);
+    },
+  },
+  mounted() {
+    this.loading = true;
+    const categoriesPromise = this.$http.get('categories');
+    const brandsPromise = this.$http.get('brands');
+    const taxesPromise = this.$http.get('taxes', this.$root.httpOptions());
+    let productPromise;
+
+    if (this.action === 'edit') {
+      productPromise = this.$http.get('product/' + this.$route.params.id);
+    } else {
+      productPromise = Promise.resolve({body: this.product});
+    }
+
+    Promise.all([categoriesPromise, brandsPromise, taxesPromise, productPromise]).then((data) => {
+      this.loading = false;
+      this.categories = data[0].body;
+      this.brands = data[1].body;
+      this.taxes = data[2].body;
+      this.product = data[3].body;
+    }).catch((err) => {
+      console.error(err);
+      this.loading = false;
+      this.$root.showSnackbar('errors.cantLoadResources');
+      this.$router.back();
+    });
+  },
+};
 </script>
 
 <style lang="css">

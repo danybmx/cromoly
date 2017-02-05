@@ -40,7 +40,7 @@
             <router-link to="/users">{{ $t('menu.users') }}</router-link>
           </md-list-item>
           <md-list-item>
-            <router-link to="/storages">{{ $t('menu.storages') }}</router-link>
+            <router-link to="/warehouses">{{ $t('menu.warehouses') }}</router-link>
           </md-list-item>
           <md-list-item>
             <router-link to="/taxes">{{ $t('menu.taxes') }}</router-link>

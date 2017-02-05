@@ -3,7 +3,7 @@ const controllers = {
   categories: require('./categories'),
   brands: require('./brands'),
   orders: require('./orders'),
-  storages: require('./storages'),
+  warehouses: require('./warehouses'),
   users: require('./users'),
   auth: require('./auth'),
   taxes: require('./taxes'),
