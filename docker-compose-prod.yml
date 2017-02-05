@@ -3,6 +3,7 @@ version: '2'
 services:
   api:
     image: node:latest
+    restart: always
     environment:
       - VIRTUAL_HOST=api.cromoly.com
       - VIRTUAL_PROTO=http
@@ -22,6 +23,7 @@ services:
 
   management:
     image: node:latest
+    restart: always
     environment:
       - VIRTUAL_HOST=management.cromoly.com
       - VIRTUAL_PROTO=http
@@ -43,6 +45,7 @@ services:
 
   website:
     image: node:latest
+    restart: always
     environment:
       - VIRTUAL_HOST=web.cromoly.com
       - VIRTUAL_PROTO=http
