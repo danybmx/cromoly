@@ -10,9 +10,6 @@ services:
       - ./api:/app
     working_dir: /app
     command: npm run dev
-    networks:
-      - default
-      - nginx-proxy
     expose:
       - "3000"
     links:
@@ -29,9 +26,6 @@ services:
       - ./management:/app
     working_dir: /app
     command: npm run dev
-    networks:
-      - default
-      - nginx-proxy
     expose:
       - "3000"
     links:
@@ -47,9 +41,6 @@ services:
       - ./website:/app
     working_dir: /app
     command: npm run dev
-    networks:
-      - default
-      - nginx-proxy
     expose:
       - "3000"
     links:
@@ -61,13 +52,14 @@ services:
       - "38028:27017"
     volumes:
       - mongo-data:/data/db
-    networks:
-      - default
+
+  proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
 
 volumes:
   mongo-data:
     driver: local
-
-networks:
-  nginx-proxy:
-    external: true
