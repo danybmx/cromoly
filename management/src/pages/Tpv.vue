@@ -1,5 +1,5 @@
 <template lang="html">
-  <page-content :page-title="$t('menu.pos')">
+  <page-content :page-title="$t('menu.tpv')">
     <p>Avatars can be used to represent people. When used with a specific logo, avatars can also be used to represent brand.</p>
     <p>The following classes can be applied to change the color palette:</p>
     <ul class="md-body-2">
