@@ -14,6 +14,7 @@ const productOptionSchema = new Schema({
   buyTaxes: [{type: Schema.Types.ObjectId, ref: 'Tax'}],
   buyPriceWithTaxes: {type: Number},
   discount: {type: Number, required: true},
+  buyDiscount: { type: Number, required: true },
   stock: [
     {
       storage: {type: Schema.Types.ObjectId, ref: 'Stock'},

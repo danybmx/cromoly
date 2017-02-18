@@ -13,6 +13,7 @@ export default {
     configuration: 'Configuración',
     taxes: 'Impuestos',
   },
+
   auth: {
     subtitle: 'Accede a tu cuenta',
     email: 'E-mail',
@@ -20,6 +21,7 @@ export default {
     login: 'Acceder',
     logout: 'Salir',
   },
+
   buttons: {
     edit: 'Editar',
     delete: 'Eliminar',
@@ -29,9 +31,11 @@ export default {
     ok: 'Aceptar',
     cancel: 'Cancelar',
   },
+
   common: {
     deleteConfirm: '¿Estás seguro?',
   },
+
   products: {
     list: 'Productos',
     brand: 'Marca',
@@ -50,14 +54,22 @@ export default {
       name: 'Nombre',
       ean: 'EAN',
       reference: 'Referencia',
+      discount: 'Descuento',
+      buyDiscount: 'Descuento',
       taxes: 'Impuestos',
       buyTaxes: 'Impuestos de compra',
       price: 'Precio',
       buyPrice: 'Precio de compra',
-      priceWithTaxes: 'Precio impuestos incl.',
-      buyPriceWithTaxes: 'Precio de compra impuestos incl.',
+      priceWithTaxes: 'Precio + imp',
+      buyPriceWithTaxes: 'Precio de compra + imp',
+      stock: {
+        title: 'Existencias',
+        warehouse: 'Almacén',
+        units: 'Unidades',
+      },
     },
   },
+
   brands: {
     list: 'Marcas',
     edit: 'Editando marca',
@@ -67,6 +79,7 @@ export default {
     slug: 'URL',
     visible: 'Visible',
   },
+
   warehouses: {
     list: 'Almacenes',
     edit: 'Editando almacén',
@@ -77,6 +90,7 @@ export default {
     address: 'Dirección',
     useForWeb: 'Usar en la web',
   },
+
   taxes: {
     list: 'Impuestos',
     edit: 'Editando impuesto',
@@ -86,6 +100,7 @@ export default {
     value: 'Valor',
     default: 'Por defecto',
   },
+
   categories: {
     list: 'Categorías',
     edit: 'Editando categoría',
@@ -95,6 +110,7 @@ export default {
     slug: 'URL',
     visible: 'Visible',
   },
+
   errors: {
     wrongPassword: 'Contraseña incorrecta',
     userNotFound: 'No existe ningún usuario con ese email',
@@ -102,6 +118,7 @@ export default {
     checkTheForm: 'Ha ocurrido un error, comprueba el formulario',
     errorSaving: 'Ha ocurrido un error guardando los datos, contacte con el adminstrador',
   },
+
   address: {
     address: 'Dirección',
     city: 'Ciudad',
@@ -109,6 +126,7 @@ export default {
     country: 'País',
     zip: 'Código Postal',
   },
+
   veeValidate: {
     after: (f, [target]) => `Debe ser posterior a ${target}.`,
     alpha_dash: () => `Solo debe contener letras, números y guiones.`,

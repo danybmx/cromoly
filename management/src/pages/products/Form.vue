@@ -94,7 +94,7 @@
                   <md-table-row v-for="(option, index) in product.options">
                     <md-table-cell>{{option.name}}</md-table-cell>
                     <md-table-cell md-numeric>{{option.stock}}</md-table-cell>
-                    <md-table-cell md-numeric>{{option.price.toFixed(2)}} {{$root.config.currency}}</md-table-cell>
+                    <md-table-cell md-numeric>{{option.price | currency}} {{$root.config.currency}}</md-table-cell>
                     <md-table-cell md-numeric>
                       <md-menu md-direction="bottom left">
                         <md-button md-menu-trigger class="md-icon-button">
@@ -131,7 +131,7 @@
     </form>
 
     <md-dialog @close="onClose" ref="product-option-dialog">
-      <form novalidate v-if="currentOption !== null" style="width: 800px" v-on:submit.prevent="saveProductOption()">
+      <form novalidate v-if="currentOption !== null" style="width: 900px" v-on:submit.prevent="saveProductOption()">
         <md-dialog-content>
           <md-layout md-gutter="16">
             <md-layout md-column>
@@ -167,14 +167,20 @@
             </md-layout>
             <md-layout md-column>
               <md-input-container>
+                <label>{{$t('products.options.priceWithTaxes')}}</label>
+                <md-input data-vv-scope="product-option-form" @input="updatePriceWithoutTaxes()" v-model="currentOption.priceWithTaxes"></md-input>
+              </md-input-container>
+            </md-layout>
+            <md-layout md-column>
+              <md-input-container>
                 <label>{{$t('products.options.price')}}</label>
                 <md-input data-vv-scope="product-option-form" v-model="currentOption.price"></md-input>
               </md-input-container>
             </md-layout>
             <md-layout md-column>
               <md-input-container>
-                <label>{{$t('products.options.priceWithTaxes')}}</label>
-                <md-input data-vv-scope="product-option-form" v-model="currentOption.priceWithTaxes"></md-input>
+                <label>{{$t('products.options.discount')}}</label>
+                <md-input data-vv-scope="product-option-form" v-model="currentOption.discount"></md-input>
               </md-input-container>
             </md-layout>
           </md-layout>
@@ -192,14 +198,20 @@
             </md-layout>
             <md-layout md-column>
               <md-input-container>
+                <label>{{$t('products.options.buyPriceWithTaxes')}}</label>
+                <md-input data-vv-scope="product-option-form" @input="updateBuyPriceWithoutTaxes()" v-model="currentOption.buyPriceWithTaxes"></md-input>
+              </md-input-container>
+            </md-layout>
+            <md-layout md-column>
+              <md-input-container>
                 <label>{{$t('products.options.buyPrice')}}</label>
                 <md-input data-vv-scope="product-option-form" v-model="currentOption.buyPrice"></md-input>
               </md-input-container>
             </md-layout>
             <md-layout md-column>
               <md-input-container>
-                <label>{{$t('products.options.buyPriceWithTaxes')}}</label>
-                <md-input data-vv-scope="product-option-form" v-model="currentOption.buyPriceWithTaxes"></md-input>
+                <label>{{$t('products.options.buyDiscount')}}</label>
+                <md-input data-vv-scope="product-option-form" v-model="currentOption.buyDiscount"></md-input>
               </md-input-container>
             </md-layout>
           </md-layout>
@@ -241,6 +253,7 @@ export default {
       brands: [],
       images: [],
       categories: [],
+      warehouses: [],
       loading: false,
     };
   },
@@ -268,6 +281,7 @@ export default {
         return this.$root.showSnackbar(this.$t('errors.checkTheForm'));
       });
     },
+
     saveProductOption() {
       this.$validator.validateAll('product-option-form').then((success) => {
         if (this.currentOptionIndex !== null) {
@@ -280,18 +294,22 @@ export default {
         return this.$root.showSnackbar(this.$t('errors.checkTheForm'));
       });
     },
+
     closeProductOptionForm() {
       this.$refs['product-option-dialog'].close();
     },
+
     getDefaultTaxes() {
       return this.taxes.map((t) => t.default ? t._id : null);
     },
+
     onClose() {
       setTimeout(() => {
         this.currentOptionIndex = null;
         this.currentOption = null;
       }, 300);
     },
+
     addOption() {
       this.currentOption = {
         ean: '',
@@ -301,20 +319,23 @@ export default {
         buyTaxes: this.getDefaultTaxes(),
         stock: [],
         images: [],
-        discount: 0,
-        price: 0,
-        buyPrice: 0,
-        priceWithTaxes: 0,
-        buyPriceWithTaxes: 0,
+        discount: null,
+        buyDiscount: null,
+        price: null,
+        buyPrice: null,
+        priceWithTaxes: null,
+        buyPriceWithTaxes: null,
       };
       this.currentOptionIndex = null;
       this.$refs['product-option-dialog'].open();
     },
+
     editOption(index) {
       this.currentOptionIndex = index;
       this.currentOption = Object.assign({}, this.product.options[index]);
       this.$refs['product-option-dialog'].open();
     },
+
     deleteOption(index) {
       if (this.currentOption === index) {
         this.currentOptionIndex = null;
@@ -323,12 +344,34 @@ export default {
       if (this.currentOption > index) this.currentOptionIndex -= 1;
       this.product.options.splice(index, 1);
     },
+
+    updatePriceWithoutTaxes() {
+      let taxes = 1;
+      this.taxes.map((tax) => {
+        if (this.currentOption.taxes.indexOf(tax._id) > -1) {
+          taxes += tax.value / 100;
+        }
+      });
+      this.currentOption.price = Math.round(this.currentOption.priceWithTaxes / taxes * 100) / 100;
+    },
+
+    updateBuyPriceWithoutTaxes() {
+      let taxes = 1;
+      this.taxes.map((tax) => {
+        if (this.currentOption.buyTaxes.indexOf(tax._id) > -1) {
+          taxes += tax.value / 100;
+        }
+      });
+      this.currentOption.buyPrice = Math.round(this.currentOption.buyPriceWithTaxes / taxes * 100) / 100;
+    },
   },
+
   mounted() {
     this.loading = true;
     const categoriesPromise = this.$http.get('categories');
     const brandsPromise = this.$http.get('brands');
     const taxesPromise = this.$http.get('taxes', this.$root.httpOptions());
+    const warehousesPromise = this.$http.get('warehouses', this.$root.httpOptions());
     let productPromise;
 
     if (this.action === 'edit') {
@@ -337,12 +380,13 @@ export default {
       productPromise = Promise.resolve({body: this.product});
     }
 
-    Promise.all([categoriesPromise, brandsPromise, taxesPromise, productPromise]).then((data) => {
+    Promise.all([categoriesPromise, brandsPromise, taxesPromise, warehousesPromise, productPromise]).then((data) => {
       this.loading = false;
       this.categories = data[0].body;
       this.brands = data[1].body;
       this.taxes = data[2].body;
-      this.product = data[3].body;
+      this.warehouses = data[3].body;
+      this.product = data[4].body;
     }).catch((err) => {
       console.error(err);
       this.loading = false;

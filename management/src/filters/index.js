@@ -1,6 +1,7 @@
 const filters = {
   nl2br: require('./nl2br'),
   nl2comma: require('./nl2comma'),
+  currency: require('./currency'),
 };
 
 module.exports = {
