@@ -1,6 +1,7 @@
-# webpack-vue-app
+# Management app
 
-> A Vue.js project
+A management web application written in Vue.js that interactuates
+with the backend for manage the website data and the TPV.
 
 ## Build Setup
 
@@ -14,5 +15,3 @@ npm run dev
 # build for production with minification
 npm run build
 ```
-
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
