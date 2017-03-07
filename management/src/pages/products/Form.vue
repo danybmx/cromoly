@@ -84,7 +84,7 @@
                 <md-table-header>
                   <md-table-row>
                     <md-table-head>{{$t('products.name')}}</md-table-head>
-                    <md-table-head style="width: 100px" md-numeric>{{$t('products.stock')}}</md-table-head>
+                    <md-table-head style="width: 300px" md-numeric>{{$t('products.stock')}}</md-table-head>
                     <md-table-head style="width: 140px" md-numeric>{{$t('products.price')}}</md-table-head>
                     <md-table-head style="width: 40px"></md-table-head>
                   </md-table-row>
@@ -93,8 +93,8 @@
                 <md-table-body>
                   <md-table-row v-for="(option, index) in product.options">
                     <md-table-cell>{{option.name}}</md-table-cell>
-                    <md-table-cell md-numeric>{{option.stock}}</md-table-cell>
-                    <md-table-cell md-numeric>{{option.price | currency}} {{$root.config.currency}}</md-table-cell>
+                    <md-table-cell md-numeric>{{getFormattedStock(option.stock)}}</md-table-cell>
+                    <md-table-cell md-numeric>{{option.priceWithTaxes | currency}} {{$root.config.currency}}</md-table-cell>
                     <md-table-cell md-numeric>
                       <md-menu md-direction="bottom left">
                         <md-button md-menu-trigger class="md-icon-button">
@@ -230,6 +230,21 @@
       </form>
     </md-dialog>
 
+    <md-dialog @close="onClose" ref="product-stock-dialog">
+      <form novalidate v-if="currentOption !== null" style="width: 900px" v-on:submit.prevent="saveProductStock()">
+        <md-dialog-content>
+          <md-layout md-gutter="16">
+            <md-layout md-column>
+              <md-input-container>
+                <label>{{$t('products.options.reference')}}</label>
+                <md-input data-vv-scope="product-option-form" v-model="currentOption.reference"></md-input>
+              </md-input-container>
+            </md-layout>
+          </md-layout>
+        </md-dialog-content>
+      </form>
+    </md-dialog>
+
   </page-content>
 </template>
 
@@ -303,6 +318,31 @@ export default {
       return this.taxes.map((t) => t.default ? t._id : null);
     },
 
+    createEmptyStockObject() {
+      let stock = [];
+      this.warehouses.map((warehouse) => {
+        stock.push({
+          warehouse: warehouse._id,
+          units: 0,
+        });
+      });
+      return stock;
+    },
+
+    getFormattedStock(stockArray) {
+      let stockStringBuilder = [];
+      this.warehouses.map((warehouse) => {
+        let units = 0;
+        stockArray.map((s) => {
+          if (s.warehouse === warehouse) {
+            units = s.warehouse.units;
+          }
+        });
+        stockStringBuilder.push(`${warehouse.name}: ${units}`);
+      });
+      return stockStringBuilder.join(', ');
+    },
+
     onClose() {
       setTimeout(() => {
         this.currentOptionIndex = null;
@@ -317,7 +357,7 @@ export default {
         name: '',
         taxes: this.getDefaultTaxes(),
         buyTaxes: this.getDefaultTaxes(),
-        stock: [],
+        stock: this.createEmptyStockObject(),
         images: [],
         discount: null,
         buyDiscount: null,
@@ -356,6 +396,7 @@ export default {
     },
 
     updateBuyPriceWithoutTaxes() {
+      console.log('update');
       let taxes = 1;
       this.taxes.map((tax) => {
         if (this.currentOption.buyTaxes.indexOf(tax._id) > -1) {
