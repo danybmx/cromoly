@@ -4,20 +4,20 @@ const Schema = mongoose.Schema;
 
 const productOptionSchema = new Schema({
   ean: {type: String},
-  reference: {type: String, required: true},
+  reference: {type: String},
   name: {type: String, required: true},
   slug: {type: String, required: true},
   price: {type: Number, required: true},
   taxes: [{type: Schema.Types.ObjectId, ref: 'Tax'}],
-  priceWithTaxes: {type: Number},
+  priceWithTaxes: {type: Number, required: true},
   buyPrice: {type: Number},
   buyTaxes: [{type: Schema.Types.ObjectId, ref: 'Tax'}],
   buyPriceWithTaxes: {type: Number},
-  discount: {type: Number, required: true},
-  buyDiscount: { type: Number, required: true },
+  discount: {type: Number},
+  buyDiscount: {type: Number},
   stock: [
     {
-      storage: {type: Schema.Types.ObjectId, ref: 'Stock'},
+      warehouse: {type: Schema.Types.ObjectId, ref: 'Warehouse'},
       units: {type: Number, required: true},
     },
   ],
