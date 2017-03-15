@@ -55,10 +55,6 @@
                       <span>Delete</span>
                       <md-icon>delete</md-icon>
                     </md-menu-item>
-                    <!--<md-menu-item>
-                      <span>Print stickers</span>
-                      <md-icon>local_offer</md-icon>
-                    </md-menu-item>-->
                   </md-menu-content>
                 </md-menu>
                 <md-button class="md-icon-button" v-on:click="showProduct(product)">
