@@ -105,6 +105,10 @@
                             <span>{{$t('buttons.edit')}}</span>
                             <md-icon>edit</md-icon>
                           </md-menu-item>
+                          <md-menu-item v-on:click="editStock(index)">
+                            <span>{{$t('products.stock')}}</span>
+                            <md-icon>view_comfy</md-icon>
+                          </md-menu-item>
                           <md-menu-item v-on:click="deleteOption(index)">
                             <span>{{$t('buttons.delete')}}</span>
                             <md-icon>delete</md-icon>
@@ -132,6 +136,9 @@
 
     <md-dialog @close="onClose" ref="product-option-dialog">
       <form novalidate v-if="currentOption !== null" style="width: 900px" v-on:submit.prevent="saveProductOption()">
+        <md-dialog-title>
+          {{$t('products.options.singularTitle')}}{{currentOption.name ? ': ' + currentOption.name : '' }}
+        </md-dialog-title>
         <md-dialog-content>
           <md-layout md-gutter="16">
             <md-layout md-column>
@@ -230,21 +237,33 @@
       </form>
     </md-dialog>
 
-    <md-dialog @close="onClose" ref="product-stock-dialog">
+    <md-dialog @close="onClose" ref="product-option-stock-dialog">
       <form novalidate v-if="currentOption !== null" style="width: 900px" v-on:submit.prevent="saveProductStock()">
+        <md-dialog-title>
+          Stock
+        </md-dialog-title>
         <md-dialog-content>
           <md-layout md-gutter="16">
             <md-layout md-column>
-              <md-input-container>
-                <label>{{$t('products.options.reference')}}</label>
-                <md-input data-vv-scope="product-option-form" v-model="currentOption.reference"></md-input>
+              <md-input-container v-for="warehouse in warehouses">
+                <label>{{warehouse.name}}</label>
+                <md-input data-vv-scope="product-option-stock-form" v-validate data-vv-rules="required" v-model="currentStock[warehouse._id]"></md-input>
               </md-input-container>
             </md-layout>
           </md-layout>
         </md-dialog-content>
+        <md-dialog-actions>
+          <md-button v-on:click="closeProductOptionStockForm()" class="md-primary md-raised">
+            {{$t('buttons.cancel')}}
+            <md-icon>close</md-icon>
+          </md-button>
+          <md-button type="submit" class="md-primary md-raised">
+            {{$t('buttons.save')}}
+            <md-icon>check</md-icon>
+          </md-button>
+        </md-dialog-actions>
       </form>
     </md-dialog>
-
   </page-content>
 </template>
 
@@ -265,6 +284,7 @@ export default {
       },
       currentOption: null,
       currentOptionIndex: null,
+      currentStock: {},
       brands: [],
       images: [],
       categories: [],
@@ -314,6 +334,34 @@ export default {
       this.$refs['product-option-dialog'].close();
     },
 
+    saveProductStock() {
+      this.$validator.validateAll('product-option-stock-form').then((success) => {
+        let stock = [];
+
+        for (let key in this.currentStock) {
+          if (this.currentStock.hasOwnProperty(key)) {
+            const s = this.currentStock[key];
+            stock.push({
+              warehouse: key,
+              units: s,
+            });
+          }
+        }
+
+        this.product.options[this.currentOptionIndex].stock = stock;
+        this.currentOptionIndex = null;
+        this.currentStock = {};
+        this.closeProductOptionStockForm();
+      }).catch((err) => {
+        console.error(err);
+        return this.$root.showSnackbar(this.$t('errors.checkTheForm'));
+      });
+    },
+
+    closeProductOptionStockForm() {
+      this.$refs['product-option-stock-dialog'].close();
+    },
+
     getDefaultTaxes() {
       return this.taxes.map((t) => t.default ? t._id : null);
     },
@@ -334,13 +382,23 @@ export default {
       this.warehouses.map((warehouse) => {
         let units = 0;
         stockArray.map((s) => {
-          if (s.warehouse === warehouse) {
-            units = s.warehouse.units;
+          if (s.warehouse === warehouse._id.toString()) {
+            units = s.units;
           }
         });
         stockStringBuilder.push(`${warehouse.name}: ${units}`);
       });
       return stockStringBuilder.join(', ');
+    },
+
+    getStockForWarehouse(warehouseId, stockArray) {
+      let units = 0;
+      stockArray.map((s) => {
+        if (s.warehouse === warehouseId.toString()) {
+          units = s.units;
+        }
+      });
+      return units;
     },
 
     onClose() {
@@ -370,6 +428,18 @@ export default {
       this.$refs['product-option-dialog'].open();
     },
 
+    editStock(index) {
+      this.currentOptionIndex = index;
+      this.currentOption = Object.assign({}, this.product.options[index]);
+      this.currentStock = {};
+
+      this.warehouses.map((w) => {
+        this.currentStock[w._id] = this.getStockForWarehouse(w._id, this.currentOption.stock);
+      });
+
+      this.$refs['product-option-stock-dialog'].open();
+    },
+
     editOption(index) {
       this.currentOptionIndex = index;
       this.currentOption = Object.assign({}, this.product.options[index]);
@@ -396,7 +466,6 @@ export default {
     },
 
     updateBuyPriceWithoutTaxes() {
-      console.log('update');
       let taxes = 1;
       this.taxes.map((tax) => {
         if (this.currentOption.buyTaxes.indexOf(tax._id) > -1) {
@@ -404,6 +473,31 @@ export default {
         }
       });
       this.currentOption.buyPrice = Math.round(this.currentOption.buyPriceWithTaxes / taxes * 100) / 100;
+    },
+
+    saveProduct() {
+      this.$validator.validateAll().then((success) => {
+        this.loading = true;
+
+        let promise = null;
+        if (this.product._id) {
+          promise = this.$http.put(`products/${this.product._id}`, this.product, this.$root.httpOptions());
+        } else {
+          promise = this.$http.post(`products`, this.product, this.$root.httpOptions());
+        }
+
+        promise.then(() => {
+          this.loading = false;
+          this.$router.back();
+        }).catch((err) => {
+          this.loading = false;
+          this.$root.showSnackbar(this.$t('errors.errorSaving'));
+          console.error(err);
+        });
+      }).catch((err) => {
+        console.error(err);
+        return this.$root.showSnackbar(this.$t('errors.checkTheForm'));
+      });
     },
   },
 
@@ -416,7 +510,7 @@ export default {
     let productPromise;
 
     if (this.action === 'edit') {
-      productPromise = this.$http.get('product/' + this.$route.params.id);
+      productPromise = this.$http.get('products/' + this.$route.params.id);
     } else {
       productPromise = Promise.resolve({body: this.product});
     }

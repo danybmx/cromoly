@@ -29,6 +29,7 @@ export default {
     tag: 'Etiqueta',
     save: 'Guardar',
     ok: 'Aceptar',
+    close: 'Cerrar',
     cancel: 'Cancelar',
   },
 
@@ -49,8 +50,10 @@ export default {
     visible: 'Visible',
     featured: 'Destacado',
     category: 'Categoría',
+    delete: 'Vas a eliminar el producto "{name}"',
     options: {
       title: 'Opciones',
+      singularTitle: 'Opción',
       name: 'Nombre',
       ean: 'EAN',
       reference: 'Referencia',
