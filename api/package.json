@@ -11,7 +11,7 @@
     "url": "git+ssh://git@bitbucket.org/cromoly/api.git"
   },
   "scripts": {
-    "dev": "nodemon -e js,json --watch app --watch *.js main",
+    "dev": "nodemon main.js",
     "start": "npm install && node main"
   },
   "dependencies": {
