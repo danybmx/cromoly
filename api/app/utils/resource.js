@@ -40,7 +40,7 @@ const update = (Model) => {
   return (req, res, next) => {
     Model.findById(req.params.id).then((data) => {
       if (!data) return next(errors.notFound);
-      updated = Object.assign(data, req.body);
+      const updated = Object.assign(data, req.body);
       updated.save()
         .then((data) => res.json({success: true}))
         .catch(next);
