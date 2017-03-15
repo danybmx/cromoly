@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const softDelete = require('mongoose-soft-delete');
 const Schema = mongoose.Schema;
+const slugify = require('../utils/slugify');
 
 const productOptionSchema = new Schema({
   ean: {type: String},
@@ -35,6 +36,7 @@ const productSchema = new Schema({
   onDemand: {type: Boolean, default: false},
   options: [productOptionSchema],
   images: [{file: {type: String, required: true}}],
+  lowestPrice: {type: Number, required: true},
   category: {
     type: Schema.Types.ObjectId, ref: 'Category',
     required: true,
@@ -46,5 +48,22 @@ const productSchema = new Schema({
 }, {timestamps: true});
 
 productSchema.plugin(softDelete, {select: false});
+
+productSchema.pre('validate', function(next) {
+  this.slug = slugify(this.name);
+  this.lowestPrice = 0;
+  for (let x = 0; x < this.options.length; x++) {
+    const opt = this.options[x];
+    if (this.lowestPrice == 0 || opt.priceWithTaxes < this.lowestPrice) {
+      this.lowestPrice = opt.priceWithTaxes;
+    }
+  }
+  next();
+});
+
+productOptionSchema.pre('validate', function(next) {
+  this.slug = slugify(this.name);
+  next();
+});
 
 module.exports = mongoose.model('Product', productSchema);
