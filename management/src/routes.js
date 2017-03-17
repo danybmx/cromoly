@@ -4,8 +4,8 @@ import Login from './pages/Login.vue';
 import Tpv from './pages/Tpv.vue';
 import Orders from './pages/Orders.vue';
 import Entries from './pages/Entries.vue';
-import Users from './pages/Users.vue';
 import NotFound from './pages/NotFound.vue';
+import users from './pages/users';
 import warehouses from './pages/warehouses';
 import products from './pages/products';
 import brands from './pages/brands';
@@ -126,7 +126,19 @@ export default [
   {
     path: '/users',
     name: 'users',
-    component: Users,
+    component: users.Index,
+    beforeEnter: requireAuth,
+  },
+  {
+    path: '/users/create',
+    name: 'create-user',
+    component: users.Form,
+    beforeEnter: requireAuth,
+  },
+  {
+    path: '/users/edit/:id',
+    name: 'edit-user',
+    component: users.Form,
     beforeEnter: requireAuth,
   },
   {

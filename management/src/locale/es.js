@@ -94,6 +94,20 @@ export default {
     useForWeb: 'Usar en la web',
   },
 
+  users: {
+    list: 'Usuarios',
+    edit: 'Editando usuario',
+    create: 'Nuevo usuario',
+    delete: 'Vas a eliminar el usuario "{name}"',
+    email: 'Email',
+    role: 'Rol',
+    roles: {
+      'OWNER': 'Super Administrador',
+      'ADMIN': 'Administrador',
+      'USER': 'Usuario',
+    },
+  },
+
   taxes: {
     list: 'Impuestos',
     edit: 'Editando impuesto',
