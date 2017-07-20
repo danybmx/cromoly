@@ -26,8 +26,8 @@
               <md-table-head style="width: 40px"></md-table-head>
             </md-table-row>
           </md-table-header>
-          
-          <md-table-body v-for="product in products">
+
+          <md-table-body :key="product._id" v-for="product in products">
             <md-table-row>
               <md-table-cell>
                 {{product.name}}
@@ -77,15 +77,15 @@
               <md-table-head>{{$t('products.options.name')}}</md-table-head>
               <md-table-head md-numeric>{{$t('products.options.price')}}</md-table-head>
               <md-table-head md-numeric>{{$t('products.options.buyPrice')}}</md-table-head>
-              <md-table-head md-numeric v-for="warehouse in warehouses">{{warehouse.name}}</md-table-head>
+              <md-table-head md-numeric :key="warehouse._id" v-for="warehouse in warehouses">{{warehouse.name}}</md-table-head>
             </md-table-row>
           </md-table-header>
-          <md-table-body v-for="option in product.options">
+          <md-table-body :key="option._id" v-for="option in product.options">
             <md-table-row>
               <md-table-cell>{{option.name}}</md-table-cell>
               <md-table-cell md-numeric :title="option.price | currency">{{option.priceWithTaxes | currency}} {{$root.config.currency}}</md-table-cell>
               <md-table-cell md-numeric :title="option.buyPrice | currency">{{option.buyPriceWithTaxes | currency}} {{$root.config.currency}}</md-table-cell>
-              <md-table-cell md-numeric v-for="warehouse in warehouses">{{getStockForWarehouse(warehouse._id, option.stock)}}</md-table-cell>
+              <md-table-cell md-numeric :key="warehouse._id" v-for="warehouse in warehouses">{{getStockForWarehouse(warehouse._id, option.stock)}}</md-table-cell>
             </md-table-row>
           </md-table-body>
         </md-table>

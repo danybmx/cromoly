@@ -12,7 +12,9 @@ const config = require('./app/config');
 
 // Database setup
 mongoose.Promise = global.Promise;
-mongoose.connect(config.mongoUri, (err) => {
+mongoose.connect(config.mongoUri, {
+    useMongoClient: true,
+}, (err) => {
   if (err) {
     log.error('Can\'t connect to mongodb', err);
     process.exit();

@@ -23,7 +23,7 @@
           </md-table-header>
 
           <md-table-body>
-            <md-table-row v-for="tax in taxes">
+            <md-table-row :key="tax._id" v-for="tax in taxes">
               <md-table-cell>{{tax.name}}</md-table-cell>
               <md-table-cell>{{tax.value}} %</md-table-cell>
               <md-table-cell>

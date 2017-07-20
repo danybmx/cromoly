@@ -22,7 +22,7 @@
           </md-table-header>
 
           <md-table-body>
-            <md-table-row v-for="brand in brands">
+            <md-table-row v-for="brand in brands" :key="brand._id">
               <md-table-cell>{{brand.name}}</md-table-cell>
               <md-table-cell>
                 <md-icon>{{brand.visible ? 'check' : 'close'}}</md-icon>

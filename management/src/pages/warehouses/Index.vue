@@ -24,7 +24,7 @@
                     </md-table-header>
 
                     <md-table-body>
-                        <md-table-row v-for="warehouse in warehouses">
+                        <md-table-row :key="warehouse._id" v-for="warehouse in warehouses">
                             <md-table-cell>{{warehouse.name}}</md-table-cell>
                             <md-table-cell>{{warehouse.address.fullAddress | nl2comma}}</md-table-cell>
                             <md-table-cell>{{warehouse.phone}}</md-table-cell>

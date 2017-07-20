@@ -22,7 +22,7 @@
           </md-table-header>
 
           <md-table-body>
-            <md-table-row v-for="user in users">
+            <md-table-row :key="user._id" v-for="user in users">
               <md-table-cell>{{user.email}}</md-table-cell>
               <md-table-cell>{{$t('users.roles.' + user.role)}}</md-table-cell>
               <md-table-cell md-numeric>

@@ -26,19 +26,22 @@ Vue.component('loader', Loader);
 // Filters
 filters.register(Vue);
 
-// i18n
-Vue.use(VueI18n);
-Object.keys(locales).forEach((key) => Vue.locale(key, locales[key]));
-Vue.config.lang = 'es';
-
 // HTML Meta management
 Vue.use(VueHead);
 
+// i18n
+Vue.use(VueI18n);
+const i18n = new VueI18n({
+  locale: 'es',
+  messages: locales,
+});
+
 // Form validation
 Vue.use(VeeValidate, {
-  locale: Vue.config.lang,
+  locale: i18n.locale,
   dictionary: {
     es: {messages: locales.es.veeValidate},
+    en: {messages: locales.en.veeValidate},
   },
 });
 
@@ -61,10 +64,12 @@ const router = new VueRouter({
 });
 
 // Instanciate the app
-let Application = Vue.component('app', App);
-Application = new Application({
+const Application = new Vue({
   el: '#app',
+  template: '<App/>',
+  components: {App},
   router,
+  i18n,
 });
 
 // Before each route

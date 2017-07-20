@@ -35,7 +35,7 @@
                 <label>{{$t('products.category')}}</label>
                 <input type="hidden" v-model="product.category" data-vv-name="category" v-validate data-vv-rules="required">
                 <md-select v-model="product.category" required>
-                  <md-option v-for="category in categories" :value="category._id">
+                  <md-option v-for="category in categories" :value="category._id" :key="category._id">
                     {{category.name}}
                   </md-option>
                 </md-select>
@@ -47,7 +47,7 @@
                 <label>{{$t('products.brand')}}</label>
                 <input type="hidden" v-model="product.brand" data-vv-name="brand" v-validate data-vv-rules="required">
                 <md-select v-model="product.brand" data-vv-name="brand" v-validate data-vv-rules="required" required>
-                  <md-option v-for="brand in brands" :value="brand._id">
+                  <md-option :key="brand._id" v-for="brand in brands" :value="brand._id">
                     {{brand.name}}
                   </md-option>
                 </md-select>
@@ -91,7 +91,7 @@
                 </md-table-header>
 
                 <md-table-body>
-                  <md-table-row v-for="(option, index) in product.options">
+                  <md-table-row v-for="(option, index) in product.options" :key="index">
                     <md-table-cell>{{option.name}}</md-table-cell>
                     <md-table-cell md-numeric>{{getFormattedStock(option.stock)}}</md-table-cell>
                     <md-table-cell md-numeric>{{option.priceWithTaxes | currency}} {{$root.config.currency}}</md-table-cell>
@@ -167,7 +167,7 @@
                 <label>{{$t('products.options.taxes')}}</label>
                 <input data-vv-scope="product-option-form" v-model="currentOption.taxes" data-vv-name="taxes" v-validate data-vv-rules="required|min:16">
                 <md-select multiple v-model="currentOption.taxes" required>
-                  <md-option v-for="tax in taxes" :value="tax._id">{{tax.name}}</md-option>
+                  <md-option :key="tax._id" v-for="tax in taxes" :value="tax._id">{{tax.name}}</md-option>
                 </md-select>
                 <span class="md-error" v-if="errors.has('product-option-form.taxes')">{{errors.first('product-option-form.taxes')}}</span>
               </md-input-container>
@@ -198,7 +198,7 @@
                 <label>{{$t('products.options.buyTaxes')}}</label>
                 <input data-vv-scope="product-option-form" v-model="currentOption.buyTaxes" data-vv-name="buyTaxes" v-validate data-vv-rules="required|min:16">
                 <md-select multiple v-model="currentOption.buyTaxes" required>
-                  <md-option v-for="tax in taxes" :value="tax._id">{{tax.name}}</md-option>
+                  <md-option :key="tax._id" v-for="tax in taxes" :value="tax._id">{{tax.name}}</md-option>
                 </md-select>
                 <span class="md-error" v-if="errors.has('product-option-form.buyTaxes')">{{errors.first('product-option-form.buyTaxes')}}</span>
               </md-input-container>
@@ -245,7 +245,7 @@
         <md-dialog-content>
           <md-layout md-gutter="16">
             <md-layout md-column>
-              <md-input-container v-for="warehouse in warehouses">
+              <md-input-container :key="warehouse._id" v-for="warehouse in warehouses">
                 <label>{{warehouse.name}}</label>
                 <md-input data-vv-scope="product-option-stock-form" v-validate data-vv-rules="required" v-model="currentStock[warehouse._id]"></md-input>
               </md-input-container>

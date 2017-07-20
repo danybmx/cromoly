@@ -22,7 +22,7 @@
           </md-table-header>
 
           <md-table-body>
-            <md-table-row v-for="category in categories">
+            <md-table-row v-for="category in categories" :key="category._id">
               <md-table-cell>{{category.name}}</md-table-cell>
               <md-table-cell>
                 <md-icon>{{category.visible ? 'check' : 'close'}}</md-icon>
